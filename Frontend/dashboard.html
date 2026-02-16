@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Premium Todo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="/src/main.js"></script>
+    <style>
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen relative pb-20">
+
+    <!-- Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-600/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-40 w-full glass-panel border-b border-white/5 rounded-none shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">TaskMaster</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="user-greeting" class="text-sm text-slate-600 dark:text-slate-400 hidden sm:block">Welcome
+                        back</span>
+                    <button id="logout-btn"
+                        class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Stats / Header -->
+        <div class="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-1">Your Tasks</h1>
+                <p class="text-slate-600 dark:text-slate-400">Manage your daily goals efficiently</p>
+            </div>
+            <button id="add-todo-btn" class="btn-primary flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                New Task
+            </button>
+        </div>
+
+        <!-- Todo Grid -->
+        <div id="todo-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Todos will be injected here -->
+            <div class="col-span-full text-center py-20 text-slate-500">
+                Loading tasks...
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="todo-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-backdrop"></div>
+
+        <!-- Content -->
+        <div class="relative w-full max-w-lg glass-panel p-6 md:p-8 transform transition-all">
+            <h3 id="modal-title" class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Add New Task</h3>
+
+            <form id="todo-form" class="space-y-6">
+                <input type="hidden" id="todo-id">
+
+                <div class="space-y-2">
+                    <label for="todo-title"
+                        class="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Title</label>
+                    <input type="text" id="todo-title" name="title" placeholder="What needs to be done?" required
+                        class="glass-input focus:ring-2 ring-indigo-500/50" />
+                </div>
+
+                <div class="space-y-2">
+                    <label for="todo-desc"
+                        class="text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Description
+                        (Optional)</label>
+                    <textarea id="todo-desc" name="description" rows="3" placeholder="Add some details..."
+                        class="glass-input focus:ring-2 ring-indigo-500/50 resize-none"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="button" id="cancel-modal"
+                        class="px-5 py-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors font-medium">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        Save Task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #6366f1;
+  --color-brand-secondary: #8b5cf6;
+}
+
+:root {
+  /* Light Mode Defaults */
+  --bg-primary: #f8fafc;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --input-bg: rgba(255, 255, 255, 0.6);
+  --card-hover: rgba(0, 0, 0, 0.03);
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-track: #f1f5f9;
+}
+
+:root.dark {
+  /* Dark Mode Overrides */
+  --bg-primary: #0f172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --card-hover: rgba(255, 255, 255, 0.05);
+  --scrollbar-thumb: #334155;
+  --scrollbar-track: #0f172a;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply backdrop-blur-xl shadow-2xl rounded-2xl;
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-input {
+    @apply w-full px-4 py-3 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none transition-all duration-300;
+    background-color: var(--input-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+  }
+
+  .glass-input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-300;
+    background-color: var(--glass-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--card-hover);
+  }
+
+  .card-hover:hover {
+    background-color: var(--card-hover);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
