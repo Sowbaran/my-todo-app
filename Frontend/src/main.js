@@ -1,6 +1,6 @@
 import './style.css';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://my-todo-app-f00h.onrender.com/api';
 
 // DOM Elements
 const app = document.getElementById('app');
